@@ -1,13 +1,16 @@
 package pages;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 public class MailinatorLoginPage extends BasePage{
 
-    private By searchInputLocator = By.cssSelector("#search");
-    private By searchButtonLocator = By.xpath("//button[@value='Search for public inbox for free']");
+    @FindBy(css = "#search")
+    private WebElement searchInputLocator;
+
+    @FindBy(xpath = "//button[@value='Search for public inbox for free']")
+    private WebElement searchButtonLocator;
 
     public MailinatorLoginPage(WebDriver driver){
         super(driver);
@@ -19,14 +22,11 @@ public class MailinatorLoginPage extends BasePage{
     }
 
     public void SearchForLetter(){
-        WebElement searchButton = driver.findElement(searchButtonLocator);
-
-        searchButton.click();
+        searchButtonLocator.click();
     }
 
     public void InputTheEmail(String email){
-        WebElement searchInput = driver.findElement(searchInputLocator);
-        searchInput.click();
-        searchInput.sendKeys(email);
+        searchInputLocator.click();
+        searchInputLocator.sendKeys(email);
     }
 }

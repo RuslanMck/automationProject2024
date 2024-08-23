@@ -2,6 +2,8 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -9,13 +11,26 @@ import java.time.Duration;
 
 public class UkrnetHomePage extends BasePage{
 
-    private By sendLetterButton = By.cssSelector(".button.primary");
-    private By toInput = By.cssSelector("[name='toFieldInput']");
-    private By subjectInput = By.cssSelector("[name='subject']");
-    private By sendButton = By.cssSelector(".screen__head .send");
-    private By iFrameBody = By.cssSelector("iframe#mce_0_ifr");
-    private By letterBody = By.cssSelector("#tinymce");
-    private By letterIsSent = By.cssSelector(".sendmsg__ads-ready");
+    @FindBy(css = ".button.primary")
+    private WebElement sendLetterButton;
+
+    @FindBy(css = "[name='toFieldInput']")
+    private WebElement toInput;
+
+    @FindBy(css = "[name='subject']")
+    private WebElement subjectInput;
+
+    @FindBy(css = ".screen__head .send")
+    private WebElement sendButton;
+
+    @FindBy(css = "iframe#mce_0_ifr")
+    private WebElement iFrameBody;
+
+    @FindBy(css = "#tinymce")
+    private WebElement letterBody;
+
+    @FindBy(css = ".sendmsg__ads-ready")
+    private WebElement letterIsSent;
 
 
     public UkrnetHomePage(WebDriver driver){
@@ -24,15 +39,15 @@ public class UkrnetHomePage extends BasePage{
     }
 
     public void openNewLetter(){
-        driver.findElement(sendLetterButton).click();
+        sendLetterButton.click();
     }
 
     public void writeLetter(String to, String subject, String body){
-        driver.findElement(toInput).sendKeys(to);
-        driver.findElement(subjectInput).sendKeys(subject);
+        toInput.sendKeys(to);
+        subjectInput.sendKeys(subject);
         try {
-            driver.switchTo().frame(driver.findElement(iFrameBody));
-            driver.findElement(letterBody).sendKeys(body);
+            driver.switchTo().frame(iFrameBody);
+            letterBody.sendKeys(body);
         } finally {
             driver.switchTo().parentFrame();
         }
@@ -40,12 +55,12 @@ public class UkrnetHomePage extends BasePage{
     }
 
     public void sendLetter(){
-        driver.findElement(sendButton).click();
+        sendButton.click();
     }
 
     public String getTextLetterIsSent(){
-        new WebDriverWait(driver, Duration.ofSeconds(60)).until(ExpectedConditions.visibilityOfElementLocated(letterIsSent));
-        return driver.findElement(letterIsSent).getText().substring(0, 18);
+        new WebDriverWait(driver, Duration.ofSeconds(60)).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".sendmsg__ads-ready")));
+        return letterIsSent.getText().substring(0, 18);
     }
 
 }

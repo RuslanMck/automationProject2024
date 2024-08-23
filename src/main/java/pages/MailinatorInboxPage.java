@@ -1,18 +1,22 @@
 package pages;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import waiters.LoadingWaiter;
 
 import java.time.Duration;
 import java.util.List;
 
 public class MailinatorInboxPage extends BasePage{
 
-    private By pageTitleLocator = By.xpath("//h4[normalize-space(text())='Public Messages']");
-    private By messagesListLocator = By.cssSelector("[id*='row_mck12q']");
+    @FindBy(xpath = "//h4[normalize-space(text())='Public Messages']")
+    private WebElement pageTitleLocator;
 
+    @FindBy(css = "[id*='row_mck12q']")
+    private List<WebElement> messagesListLocator;
 
     JavascriptExecutor javascriptExecutor = (JavascriptExecutor) driver;
 
@@ -22,16 +26,15 @@ public class MailinatorInboxPage extends BasePage{
     }
 
     public String getPageTitle(){
-        WebElement PageTitle = driver.findElement(pageTitleLocator);
-        return PageTitle.getText();
+        LoadingWaiter.waitUntilSubjectIsDisplayed(pageTitleLocator, "Public Messages");
+        return pageTitleLocator.getText();
     }
 
     public void openMessage() {
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOfElementLocated(messagesListLocator));
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[id*='row_mck12q']")));
 
-        List<WebElement> messagesList = driver.findElements(messagesListLocator);
-        System.out.println(messagesList.size());
-        messagesList.get(0).click();
+        System.out.println(messagesListLocator.size());
+        messagesListLocator.get(0).click();
     }
 
 

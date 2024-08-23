@@ -1,16 +1,24 @@
 package pages;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 
 public class MailinatorMessagPage extends BasePage {
 
-    private By emailSubjectLocator = By.xpath("//div[@class='fw-700 fz-20 ff-futura-demi']//following-sibling::div");
-    private By emailFromLocator = By.xpath("//div[normalize-space(text())='From']//following-sibling::div");
-    private By iFrameLocator = By.cssSelector("#html_msg_body");
-    private By emailTextLoctor = By.cssSelector(".xfmc1");
+    @FindBy(xpath = "//div[@class='fw-700 fz-20 ff-futura-demi']//following-sibling::div")
+    private WebElement emailSubjectLocator;
+
+    @FindBy(xpath = "//div[normalize-space(text())='From']//following-sibling::div")
+    private WebElement emailFromLocator;
+
+    @FindBy(css = "#html_msg_body")
+    private WebElement iFrameLocator;
+
+    @FindBy(css = ".xfmc1")
+    private WebElement emailTextLoctor;
 
     public MailinatorMessagPage(WebDriver driver) {
         super(driver);
@@ -19,18 +27,18 @@ public class MailinatorMessagPage extends BasePage {
     public String getEmailSubject() {
         waitUntilSubjectIsDisplayed();
 
-        System.out.println(driver.findElement(emailSubjectLocator).getText());
-        return driver.findElement(emailSubjectLocator).getText();
+        System.out.println(emailSubjectLocator.getText());
+        return emailSubjectLocator.getText();
     }
 
     public String getEmailFrom() {
-        return driver.findElement(emailFromLocator).getText();
+        return emailFromLocator.getText();
     }
 
     public String getEmailText() {
         try {
-            driver.switchTo().frame(driver.findElement(iFrameLocator));
-            return driver.findElement(emailTextLoctor).getText();
+            driver.switchTo().frame(iFrameLocator);
+            return emailTextLoctor.getText();
         } finally {
             driver.switchTo().parentFrame();
 
@@ -54,7 +62,7 @@ public class MailinatorMessagPage extends BasePage {
             System.out.println(i);
 
             try {
-                if (driver.findElement(emailSubjectLocator).getText().equals("tets")) {
+                if (emailSubjectLocator.getText().equals("tets")) {
                     return;
                 }
             } catch (NoSuchElementException e) {

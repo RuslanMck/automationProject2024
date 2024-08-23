@@ -23,7 +23,7 @@ public class UkrnetTest {
     }
 
     @Test
-    public void SendEmailToMailinator() {
+    public void SendEmailToMailinator()  {
         User user = new User("ruslan1test@ukr.net","123qweQWE");
         UkrnetLoginPage ukrnetLoginPage = new UkrnetLoginPage(driver);
         ukrnetLoginPage.navigate();
@@ -41,8 +41,10 @@ public class UkrnetTest {
 
         MailinatorLoginPage mailinatorLoginPage = new MailinatorLoginPage(driver);
         mailinatorLoginPage.navigate();
+        System.out.println("mailinatorLoginPage.navigate();");
         mailinatorLoginPage.InputTheEmail(email);
         mailinatorLoginPage.SearchForLetter();
+        System.out.println("mailinatorLoginPage.SearchForLetter();");
 
         MailinatorInboxPage mailinatorInboxPage = new MailinatorInboxPage(driver);
         Assert.assertEquals(mailinatorInboxPage.getPageTitle(), "Public Messages");
@@ -56,7 +58,12 @@ public class UkrnetTest {
         Assert.assertEquals(mailinatorMessagPage.getEmailFrom(), "ruslan1test@ukr.net");
         Assert.assertEquals(mailinatorMessagPage.getEmailText(), emailText);
 
+    }
 
-
+    @Test
+    public void stringFormat(){
+        String text = "My name is: %s, my name is: %s";
+        String resultedText = String.format(text, "Bob", 43);
+        System.out.println(resultedText);
     }
 }
