@@ -1,14 +1,20 @@
 package pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+
+import java.time.Duration;
 
 
 public class MailinatorMessagPage extends BasePage {
 
     @FindBy(xpath = "//div[@class='fw-700 fz-20 ff-futura-demi']//following-sibling::div")
+//    @FindBy(xpath = "//div[contains(normalize-space(text()), 'Public Message')]/following-sibling::div")
     private WebElement emailSubjectLocator;
 
     @FindBy(xpath = "//div[normalize-space(text())='From']//following-sibling::div")
@@ -25,7 +31,15 @@ public class MailinatorMessagPage extends BasePage {
     }
 
     public String getEmailSubject() {
-        waitUntilSubjectIsDisplayed();
+
+        new FluentWait<WebDriver>(driver)
+                .withTimeout(Duration.ofSeconds(5))
+                .pollingEvery(Duration.ofMillis(200))
+                .until(ExpectedConditions
+                        .textToBe(By.xpath("//div[contains(normalize-space(text()), " +
+                                "'Public Message')]/following-sibling::div"), "tets"));
+
+//        waitUntilSubjectIsDisplayed();
 
         System.out.println(emailSubjectLocator.getText());
         return emailSubjectLocator.getText();

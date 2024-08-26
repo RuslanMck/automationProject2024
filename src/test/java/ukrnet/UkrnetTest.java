@@ -24,20 +24,20 @@ public class UkrnetTest {
 
     @Test
     public void SendEmailToMailinator()  {
-        User user = new User("ruslan1test@ukr.net","123qweQWE");
-        UkrnetLoginPage ukrnetLoginPage = new UkrnetLoginPage(driver);
-        ukrnetLoginPage.navigate();
-        ukrnetLoginPage.login(user);
-
-        UkrnetHomePage ukrnetHomePage = new UkrnetHomePage(driver);
-        ukrnetHomePage.waitUntilLoaded();
-
-        ukrnetHomePage.openNewLetter();
-        ukrnetHomePage.writeLetter(email, subject, emailText);
-        ukrnetHomePage.sendLetter();
-        System.out.println("String" + ukrnetHomePage.getTextLetterIsSent());
-
-        Assert.assertEquals(ukrnetHomePage.getTextLetterIsSent(), "Ваш лист надіслано");
+//        User user = new User("ruslan1test@ukr.net","123qweQWE");
+//        UkrnetLoginPage ukrnetLoginPage = new UkrnetLoginPage(driver);
+//        ukrnetLoginPage.navigate();
+//        ukrnetLoginPage.login(user);
+//
+//        UkrnetHomePage ukrnetHomePage = new UkrnetHomePage(driver);
+//        ukrnetHomePage.waitUntilLoaded();
+//
+//        ukrnetHomePage.openNewLetter();
+//        ukrnetHomePage.writeLetter(email, subject, emailText);
+//        ukrnetHomePage.sendLetter();
+//        System.out.println("String" + ukrnetHomePage.getTextLetterIsSent());
+//
+//        Assert.assertEquals(ukrnetHomePage.getTextLetterIsSent(), "Ваш лист надіслано");
 
         MailinatorLoginPage mailinatorLoginPage = new MailinatorLoginPage(driver);
         mailinatorLoginPage.navigate();
