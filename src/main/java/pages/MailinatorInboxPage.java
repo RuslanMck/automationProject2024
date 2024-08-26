@@ -31,7 +31,9 @@ public class MailinatorInboxPage extends BasePage{
     }
 
     public void openMessage() {
-        new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[id*='row_mck12q']")));
+        new WebDriverWait(driver, Duration.ofSeconds(5))
+                .until(ExpectedConditions
+                        .visibilityOfElementLocated(By.cssSelector("[id*='row_mck12q']")));
 
         System.out.println(messagesListLocator.size());
         messagesListLocator.get(0).click();

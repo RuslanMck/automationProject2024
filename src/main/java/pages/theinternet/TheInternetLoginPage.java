@@ -27,6 +27,12 @@ public class TheInternetLoginPage extends BasePage {
     @FindBy(css = "[type='submit']")
     private WebElement loginButton;
 
+    @FindBy(xpath = "//div[contains(@class, 'success')]")
+    private WebElement loginConfirmationPopup;
+
+    @FindBy(xpath = "//div[contains(@class, 'error')]")
+    private WebElement loginErrorPopup;
+
     public WebElement getPageTitle() {
         return pageTitle;
     }
@@ -51,16 +57,30 @@ public class TheInternetLoginPage extends BasePage {
         return loginButton;
     }
 
-    public void login(String email, String password){
-        loginInputField.sendKeys(email);
+    public void login(String login, String password){
+        loginInputField.sendKeys(login);
         passwordInputField.sendKeys(password);
+        loginButton.click();
     }
 
     public boolean contentIsDisplayed(){
         return pageTitle.isDisplayed() & loginBlock.isDisplayed();
     }
 
+    public boolean isLoggedIn(){
+        return loginConfirmationPopup.isDisplayed();
+    }
+
     public void navigate(){
         driver.get(pageUrl);
     }
+
+    public WebElement getLoginErrorPopup() {
+        return loginErrorPopup;
+    }
+
+    public String getErrorMessage(){
+        return waitAndReturnText(loginErrorPopup).replace("×", "").trim();
+    }
+
 }
