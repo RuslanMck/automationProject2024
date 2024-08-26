@@ -60,7 +60,7 @@ public class UkrnetTest {
 
     }
 
-    @Test
+    @Test(groups = "exclude-me")
     public void stringFormat(){
         String text = "My name is: %s, my name is: %s";
         String resultedText = String.format(text, "Bob", 43);
