@@ -23,6 +23,12 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.codeborne</groupId>
+            <artifactId>selenide</artifactId>
+            <version>7.2.3</version>
+        </dependency>
+
 
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
