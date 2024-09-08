@@ -14,7 +14,7 @@ public class PetDto {
 
     private String name;
     private String status;
-
+    private long id;
 
 
     public PetDto() {

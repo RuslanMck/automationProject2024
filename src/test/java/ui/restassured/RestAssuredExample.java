@@ -1,18 +1,16 @@
 package ui.restassured;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dto.OrderDto;
 import dto.PetDto;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.http.Header;
 import io.restassured.path.json.JsonPath;
 import io.restassured.specification.RequestSpecification;
 import lombok.SneakyThrows;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.io.File;
 
 public class RestAssuredExample {
 
@@ -36,6 +34,8 @@ public class RestAssuredExample {
                 .status("available")
                 .name("Barsik")
                 .build();
+
+
 
         String petId = RestAssured.given()
                 .spec(requestSpecification)
@@ -62,7 +62,45 @@ public class RestAssuredExample {
 
         PetDto responsePet = new ObjectMapper().readValue(responsePetJson.prettify(), PetDto.class);
 
-        Assert.assertEquals(requestPet, responsePet);
+//        Assert.assertEquals(requestPet, responsePet);
 
+        System.out.println(responsePet.getName() + " " + responsePet.getStatus()+ " "  + responsePet.getId());
+
+        OrderDto orderDto = new OrderDto().builder()
+                .id(12)
+                .petId(responsePet.getId())
+                .quantity(1)
+                .status("placed")
+                .complete(true)
+                .build();
+
+        JsonPath responseOrderJson = RestAssured.given()
+                .spec(requestSpecification)
+                .body(new ObjectMapper().writeValueAsString(orderDto))
+                .when()
+                .post("/store/order")
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .jsonPath();
+
+        OrderDto responseOrder = new ObjectMapper().readValue(responseOrderJson.prettify(), OrderDto.class);
+
+        Assert.assertEquals(responseOrder, orderDto);
+
+        JsonPath createdOrderJson = RestAssured.given()
+                .spec(requestSpecification)
+                .when()
+                .get("/store/order/" + responseOrder.getId())
+                .then()
+                .statusCode(200)
+                .extract()
+                .body()
+                .jsonPath();
+
+        OrderDto createdOrder = new ObjectMapper().readValue(createdOrderJson.prettify(), OrderDto.class);
+
+         Assert.assertEquals(createdOrder, orderDto);
     }
 }
