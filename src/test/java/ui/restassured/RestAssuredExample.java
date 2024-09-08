@@ -1,10 +1,14 @@
 package ui.restassured;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dto.PetDto;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.Header;
+import io.restassured.path.json.JsonPath;
 import io.restassured.specification.RequestSpecification;
+import lombok.SneakyThrows;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -25,11 +29,17 @@ public class RestAssuredExample {
     }
 
     @Test
+    @SneakyThrows
     public void createPet(){
+
+        PetDto requestPet = new PetDto().builder()
+                .status("available")
+                .name("Barsik")
+                .build();
 
         String petId = RestAssured.given()
                 .spec(requestSpecification)
-                .body(new File("src/test/resources/testdata/petstore/barsik.json"))
+                .body(new ObjectMapper().writeValueAsString(requestPet))
                 .when()
                 .post("/pet")
                 .then()
@@ -40,7 +50,7 @@ public class RestAssuredExample {
                 .getString("id");
         System.out.println(petId);
 
-        String petName = RestAssured.given()
+        JsonPath responsePetJson = RestAssured.given()
                 .spec(requestSpecification)
                 .when()
                 .get("/pet/" + petId)
@@ -48,11 +58,11 @@ public class RestAssuredExample {
                 .statusCode(200)
                 .extract()
                 .body()
-                .jsonPath()
-                .getString("name");
-        System.out.println(petName);
+                .jsonPath();
 
-        PetDto petDto = new PetDto();
-        petDto.
+        PetDto responsePet = new ObjectMapper().readValue(responsePetJson.prettify(), PetDto.class);
+
+        Assert.assertEquals(requestPet, responsePet);
+
     }
 }
