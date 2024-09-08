@@ -8,9 +8,13 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.path.json.JsonPath;
 import io.restassured.specification.RequestSpecification;
 import lombok.SneakyThrows;
+import org.assertj.core.api.Assertions;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RestAssuredExample {
 
@@ -64,6 +68,11 @@ public class RestAssuredExample {
 
 //        Assert.assertEquals(requestPet, responsePet);
 
+        Assertions.assertThat(requestPet)
+                .usingRecursiveComparison()
+                .ignoringFields("id")
+                .isEqualTo(responsePet);
+
         System.out.println(responsePet.getName() + " " + responsePet.getStatus()+ " "  + responsePet.getId());
 
         OrderDto orderDto = new OrderDto().builder()
@@ -102,5 +111,19 @@ public class RestAssuredExample {
         OrderDto createdOrder = new ObjectMapper().readValue(createdOrderJson.prettify(), OrderDto.class);
 
          Assert.assertEquals(createdOrder, orderDto);
+    }
+
+    @Test
+    public void collectionTest(){
+        List<String> actualCollection = new ArrayList<>();
+        actualCollection = List.of("one", "two", "three");
+
+        List<String> expectedCollection = new ArrayList<>();
+        expectedCollection = List.of("two", "one", "three");
+
+        Assertions.assertThat(actualCollection)
+                .usingRecursiveComparison()
+                .ignoringCollectionOrder()
+                .isEqualTo(expectedCollection);
     }
 }

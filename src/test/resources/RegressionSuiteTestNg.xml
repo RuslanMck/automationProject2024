@@ -6,6 +6,11 @@
             <exclude name="exclude-me"/>
         </run>
     </groups>
+
+    <listeners>
+        <listener class-name="listeners.TestListener"/>
+    </listeners>
+
     <test name="The Internet">
         <classes>
             <class name="ui.theinternet.TheInternetTest"/>
